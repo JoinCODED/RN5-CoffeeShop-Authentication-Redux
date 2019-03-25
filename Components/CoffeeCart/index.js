@@ -19,42 +19,30 @@ import {
   checkoutCart
 } from "../../store/actions/cartActions";
 
+// Components
+import CartItem from "./CartItem";
+
 class CoffeeCart extends Component {
-  handleCheckout() {
+  handleCheckout = () => {
     this.props.checkoutCart();
-  }
+  };
 
-  handleRemove(item) {
+  handleRemove = item => {
     this.props.removeItemFromCart(item);
-  }
-
-  renderItem(item, index) {
-    return (
-      <ListItem key={index}>
-        <Left>
-          <Text style={{ color: "white", marginLeft: 16 }}> {item.drink} </Text>
-          <Text note style={{ marginLeft: 16 }}>
-            {item.option}
-          </Text>
-        </Left>
-        <Body>
-          <Text style={{ color: "white" }}>{item.quantity}</Text>
-        </Body>
-        <Right>
-          <Button transparent onPress={() => this.handleRemove(item)}>
-            <Icon name="trash" style={{ color: "white", fontSize: 21 }} />
-          </Button>
-        </Right>
-      </ListItem>
-    );
-  }
+  };
 
   render() {
-    const { list } = this.props.cart;
+    const { items } = this.props.cart;
+    let cartItems;
+    if (items) {
+      cartItems = items.map((item, index) => (
+        <CartItem item={item} key={index} handleRemove={this.handleRemove} />
+      ));
+    }
     return (
       <List>
-        {list.map((item, index) => this.renderItem(item, index))}
-        <Button full danger onPress={() => this.handleCheckout()}>
+        {cartItems}
+        <Button full danger onPress={this.handleCheckout}>
           <Text>Checkout</Text>
         </Button>
       </List>

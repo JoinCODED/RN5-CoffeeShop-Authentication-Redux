@@ -1,7 +1,7 @@
 import * as actionTypes from "../actions/types";
 
 const initialState = {
-  list: []
+  items: []
 };
 
 export default function(state = initialState, action) {
@@ -9,17 +9,17 @@ export default function(state = initialState, action) {
     case actionTypes.ADD_ITEM:
       return {
         ...state,
-        list: action.payload
+        items: action.payload
       };
     case actionTypes.REMOVE_ITEM:
       return {
         ...state,
-        list: state.list.filter(item => item !== action.payload)
+        items: state.items.filter(item => item !== action.payload)
       };
     case actionTypes.CHECKOUT:
       return {
         ...state,
-        list: []
+        items: []
       };
     default:
       return state;

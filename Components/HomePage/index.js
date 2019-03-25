@@ -12,7 +12,7 @@ import styles from "./styles";
 import { getCoffeeShops } from "../../store/actions/coffeeActions";
 
 // Navigation
-import Nav from "../Navigation";
+import AppContainer from "../Navigation";
 
 class HomePage extends Component {
   componentDidMount() {
@@ -23,7 +23,7 @@ class HomePage extends Component {
   render() {
     return (
       <Container style={styles.transparent}>
-        <Nav />
+        <AppContainer />
       </Container>
     );
   }

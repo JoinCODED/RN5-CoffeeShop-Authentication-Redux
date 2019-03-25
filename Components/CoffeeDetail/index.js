@@ -21,69 +21,39 @@ import styles from "./styles";
 
 // Actions
 import { addItemToCart } from "../../store/actions/cartActions";
-import { quantityCounter } from "../../utilities/quantityCounter";
+import CartButton from "../CartButton";
 
 class CoffeeDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drink: "Coffee",
-      option: "Small"
-    };
-  }
+  state = {
+    drink: "Cappuccino",
+    option: "Small"
+  };
 
   static navigationOptions = ({ navigation }) => ({
     title: navigation.getParam("shop", {}).name,
-    headerRight: (
-      <Button
-        light
-        transparent
-        onPress={() => navigation.navigate("CoffeeCart")}
-      >
-        <Text>
-          {navigation.getParam("quantity", 0)}{" "}
-          <Icon
-            type="FontAwesome"
-            name="coffee"
-            style={{ color: "white", fontSize: 15 }}
-          />
-        </Text>
-      </Button>
-    )
+    headerRight: <CartButton />
   });
 
-  componenDidMount() {
-    this.props.navigation.setParams({ quantity: this.props.quantity });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.quantity != this.props.quantity) {
-      this.props.navigation.setParams({ quantity: this.props.quantity });
-    }
-  }
-
-  changeDrink(value) {
+  changeDrink = value => {
     this.setState({
       drink: value
     });
-  }
+  };
 
-  changeOption(value) {
+  changeOption = value => {
     this.setState({
       option: value
     });
-  }
+  };
 
-  handleAdd() {
-    const { drink, option } = this.state;
-    const { list } = this.props.cart;
+  handleAdd = () => {
+    const { items } = this.props.cart;
     let item = {
-      drink: drink,
-      option: option,
+      ...this.state,
       quantity: 1
     };
-    this.props.addItemToCart(item, list);
-  }
+    this.props.addItemToCart(item, items);
+  };
 
   render() {
     const coffeeshop = this.props.navigation.getParam("shop", {});
@@ -109,10 +79,10 @@ class CoffeeDetail extends Component {
                 mode="dropdown"
                 style={{ width: 150 }}
                 selectedValue={this.state.drink}
-                onValueChange={this.changeDrink.bind(this)}
+                onValueChange={this.changeDrink}
               >
-                <Picker.Item label="Coffee" value="Coffee" />
-                <Picker.Item label="Lattee" value="Lattee" />
+                <Picker.Item label="Cappuccino" value="Cappuccino" />
+                <Picker.Item label="Latte" value="Latte" />
                 <Picker.Item label="Espresso" value="Espresso" />
               </Picker>
             </Left>
@@ -122,7 +92,7 @@ class CoffeeDetail extends Component {
                 mode="dropdown"
                 style={{ width: 150 }}
                 selectedValue={this.state.option}
-                onValueChange={this.changeOption.bind(this)}
+                onValueChange={this.changeOption}
               >
                 <Picker.Item label="Small" value="Small" />
                 <Picker.Item label="Medium" value="Medium" />
@@ -130,7 +100,7 @@ class CoffeeDetail extends Component {
               </Picker>
             </Body>
           </ListItem>
-          <Button full danger onPress={() => this.handleAdd()}>
+          <Button full danger onPress={this.handleAdd}>
             <Text>Add</Text>
           </Button>
         </List>
@@ -140,8 +110,7 @@ class CoffeeDetail extends Component {
 }
 
 const mapStateToProps = state => ({
-  cart: state.cart,
-  quantity: quantityCounter(state.cart.list)
+  cart: state.cart
 });
 
 const mapActionsToProps = dispatch => ({
